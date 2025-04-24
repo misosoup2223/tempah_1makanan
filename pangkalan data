@@ -1,0 +1,64 @@
+CREATE DATABASE tempah_makanan;
+
+CREATE TABLE pengguna (
+    notel VARCHAR(15) NOT NULL,
+    katalaluan VARCHAR(30),
+    nama VARCHAR(60),
+    tahap VARCHAR(30),
+    PRIMARY KEY (notel)
+)
+
+CREATE TABLE kategori (
+    id_kategori VARCHAR(5) NOT NULL,
+    kategori_menu VARCHAR(30),
+    PRIMARY KEY (id_kategori)
+)
+
+CREATE TABLE menu (
+    id_menu VARCHAR(50) NOT NULL,
+    nama_menu VARCHAR(100),
+    id_kategori VARCHAR(50),
+    keterangan TEXT,
+    harga DOUBLE(5,2),
+    gambar VARCHAR(50),
+    PRIMARY KEY (id_menu),
+    FOREIGN KEY (id_kategori) REFERENCES kategori(id_kategori)
+    ON UPDATE CASCADE ON DELETE CASCADE
+)
+
+CREATE TABLE resit (
+    no_resit VARCHAR(30) NOT NULL,
+    notel VARCHAR(15),
+    tarikh TIMESTAMP DEFAULT current_timestamp,
+    jenis_tempah VARCHAR(50),
+    status_tempah VARCHAR(50),
+    PRIMARY KEY (no_resit),
+    FOREIGN KEY (notel) REFERENCES pengguna(notel)
+    ON UPDATE CASCADE ON DELETE CASCADE
+)
+
+CREATE TABLE tempahan (
+    no_resit VARCHAR(30) NOT NULL,
+    id_menu VARCHAR(50),
+    harga_asal DOUBLE(5,2),
+    kuantiti INT(11),
+    PRIMARY KEY (no_resit, id_menu),
+    FOREIGN KEY (no_resit) REFERENCES resit(no_resit)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (id_menu) REFERENCES menu(id_menu)
+    ON UPDATE CASCADE ON DELETE CASCADE
+)
+
+INSERT INTO kategori VALUES 
+('CM', 'KOMBO'),
+('MK', 'MAKANAN'),
+('MN', 'MINUMAN');
+
+INSERT INTO menu (id_menu, nama_menu, id_kategori, keterangan, harga, gambar) VALUES 
+('18', 'JUS OREN SEGAR', 'MN', '2 biji buah oren segar yang dikisar', 5.00, 'freshoj.png'),
+('5', 'KETUPAT SOTONG MANIS', 'MK', 'Sotong, pulut, santan', 15.00, 'ketupatsotong.png'),
+('7', 'MEE GORENG UDANG', 'MK', 'Mee, udang, cili giling', 5.00, 'meegoreng.png');
+
+INSERT INTO pengguna (notel, katalaluan, nama, tahap) VALUES 
+('012', '012', 'NUR SHIFAHH', 'PEMBELI'),
+('013', '013', 'HADIF HAZIM', 'ADMIN');
